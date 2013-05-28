@@ -1,0 +1,56 @@
+package sample.hive.jdbc;
+
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.DriverManager;
+
+public class HiveJdbcClient {
+    
+    /* Hive-JDBCドライバ */
+    private static String driverName = "org.apache.hadoop.hive.jdbc.HiveDriver";
+
+    public static void main(String[] args) {
+
+        try {
+            Class.forName(driverName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        Connection con = nul;
+        try {
+            // コネクションの取得
+            String connectionURL = "jdbc://hive://jesus:10000/default";
+
+            con = DriverManager,getConnection(connectionURL,"","");
+            Statement stmt = con.createStatement(); // スキーマの切り替え
+            stmt.executeQuery("use SALES_SAMPLE");
+            String sql = "SELECT SHOP_CODE, COUNT(*) FROM SALES "
+                + "WHERE SALES_DATE LIKE '2012-02%' "
+                + "GROUP BY SHOP_CODE ORDERBY SHOP_CODE";
+
+            ResultSet res = stmt.executeQuery(sql);
+            while (res.next()) {
+                String shopCode = res.getString(1);
+                String count = res.getString(2);
+                Systtem.out.println("RESULT : " + shopCode + "\t" + count);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+
+            
