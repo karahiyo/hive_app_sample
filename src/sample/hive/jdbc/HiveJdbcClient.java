@@ -20,23 +20,23 @@ public class HiveJdbcClient {
             System.exit(1);
         }
 
-        Connection con = nul;
+        Connection con = null;
         try {
             // コネクションの取得
-            String connectionURL = "jdbc://hive://jesus:10000/default";
+            String connectionURL = "jdbc:hive://localhost:10000/default";
 
-            con = DriverManager,getConnection(connectionURL,"","");
+            con = DriverManager.getConnection(connectionURL,"","");
             Statement stmt = con.createStatement(); // スキーマの切り替え
             stmt.executeQuery("use SALES_SAMPLE");
             String sql = "SELECT SHOP_CODE, COUNT(*) FROM SALES "
                 + "WHERE SALES_DATE LIKE '2012-02%' "
-                + "GROUP BY SHOP_CODE ORDERBY SHOP_CODE";
+                + "GROUP BY SHOP_CODE ORDER BY SHOP_CODE";
 
             ResultSet res = stmt.executeQuery(sql);
             while (res.next()) {
                 String shopCode = res.getString(1);
                 String count = res.getString(2);
-                Systtem.out.println("RESULT : " + shopCode + "\t" + count);
+                System.out.println("RESULT : " + shopCode + "\t" + count);
             }
 
         } catch (Exception e) {
